@@ -1,12 +1,14 @@
 name: Practice for the ADA Class
 on:
   push:
-    - main
+    branches: [ "main" ]
   pull_request:
-    - main
+    branches: [ "main" ]
 jobs:
   test_build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
