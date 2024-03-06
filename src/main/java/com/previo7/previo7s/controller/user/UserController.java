@@ -31,6 +31,7 @@ public class UserController {
         userService.createUser(userEntity);
         UserDto adminUserEntity = new UserDto("Ada", "Admin", fecha, "admin@mail.com", "passw0rd");
         UserResponseDto userCreated = userService.createUser(adminUserEntity);
+        //createUserAdmin(new UserDto("Ada", " Lovelace", fecha, "ada@mail.com", "passw0rd"));
     }
 
     @GetMapping
@@ -65,6 +66,12 @@ public class UserController {
             return new ResponseEntity("An error has occurred while retrieving users", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /*
+    PaaS
+    IaaS
+    SaaS
+     */
 
     @RolesAllowed(ADMIN_ROLE)
     @PostMapping("/createAdmin")
