@@ -2,6 +2,7 @@ package com.previo7.previo7s.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,9 +31,14 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/health", "/v1/auth").permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(authz -> {
+                    authz.requestMatchers(HttpMethod.GET, "/health").permitAll();
+                    authz.requestMatchers(HttpMethod.POST, "/v1/auth").permitAll();
+                    authz.requestMatchers("/swagger-ui/**").permitAll();
+                    authz.requestMatchers("/v3/api-docs/**").permitAll();
+                    authz.requestMatchers("/swagger-ui.html").permitAll();
+                    authz.anyRequest().authenticated();
+                })
                 .httpBasic(withDefaults())
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
